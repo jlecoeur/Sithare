@@ -92,6 +92,29 @@ void Lyrics::eraseAll(string& str, string substr)
 	}
 }
 
+
+bool Lyrics::fetchLyrics()
+{
+	if(fetchAzLyrics())
+	{
+		return true;
+	}
+	else if(fetchLyricsMuse())
+	{
+		return true;
+	}
+	// else if( ... )
+	// {
+	//
+	// }
+	else
+	{
+		return false;
+	}
+	
+}
+
+
 /*
  * Lyrics Muse part
  * 
@@ -183,7 +206,7 @@ bool Lyrics::fetchLyricsMuse()
 	// web query
 	// ----------------
 	string url = getLyricsMuseURL();
-	cout << "url	: " << url << endl<<endl;
+	//cout << "url	: " << url << endl<<endl;
  		
 	// Initialize web query
 	curl = curl_easy_init();
@@ -333,7 +356,7 @@ bool Lyrics::fetchAzLyrics()
 	// web query
 	// ----------------
 	string url = getAzLyricsURL();
-	cout << "url	: " << url << endl<<endl;
+	//cout << "url	: " << url << endl<<endl;
  		
 	// Initialize web query
 	curl = curl_easy_init();

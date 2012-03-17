@@ -56,19 +56,24 @@ int main (int argc, char* argv[])
 		{
 			Lyrics lyr(artist, title);
 			string lyrics;
-			// ---
-			// Test de lyricsMuse
-			// ---
-			lyr.fetchLyricsMuse();
-			cout << lyr.getLyrics() << endl;
-
-
-			lyr.freeLyrics();
+			//~ // ---
+			//~ // Test de lyricsMuse
+			//~ // ---
+			//~ lyr.fetchLyricsMuse();
+			//~ cout << lyr.getLyrics() << endl;
+			//~ lyr.freeLyrics();
+			//~ 
+			//~ // ---
+			//~ // Test de AzLyrics
+			//~ // ---
+			//~ lyr.fetchAzLyrics();
+			//~ cout << lyr.getLyrics() << endl;
+			//~ lyr.freeLyrics();
 			
 			// ---
-			// Test de AzLyrics
+			// Test de tous les sites
 			// ---
-			lyr.fetchAzLyrics();
+			lyr.fetchLyrics();
 			cout << lyr.getLyrics() << endl;
 		}
 	}
