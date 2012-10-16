@@ -1,0 +1,314 @@
+
+ ///////////////////////////////////////////////////////////////////////////
+ // openSMILE configuration file "sithare"				  //
+ ///////////////////////////////////////////////////////////////////////////
+
+ ;===== component manager configuration (= list of enabled components!) =====
+
+[componentInstances:cComponentManager]
+ // this line configures the default data memory:
+instance[dataMemory].type = cDataMemory
+instance[waveSource].type = cWaveSource
+instance[framer].type = cFramer
+instance[energy].type = cEnergy
+instance[csvSink].type = cCsvSink
+
+instance[pe].type=cVectorPreemphasis
+instance[win].type=cWindower
+instance[fft].type=cTransformFFT
+instance[fftmag].type=cFFTmagphase
+instance[melspec].type=cMelspec
+instance[plp].type=cPlp
+//instance[delta].type=cDeltaRegression
+//instance[accel].type=cDeltaRegression
+instance[csvSink].type=cCsvSink
+
+instance[mfcc].type=cMfcc
+
+instance[lld].type=cContourSmoother
+
+instance[mzcr].type=cMZcr
+instance[acf].type=cAcf
+instance[cepstrum].type=cAcf
+instance[pitchACF].type=cPitchACF
+instance[spectral].type=cSpectral
+instance[delta1].type=cDeltaRegression
+instance[delta2].type=cDeltaRegression
+
+ // Here you can control the amount of detail displayed for the data memory
+ // level configuration. 0 is no information at all, 5 is maximum detail.
+printLevelStats = 1
+ // You can set the number of parallel threads (experimental):
+nThreads = 1
+
+// ============= component configuration sections begin here ==============
+
+
+  ;;;; default (template) configuration section for component 'cWaveSource' ;;;;
+[waveSource:cWaveSource]
+writer.dmLevel = wave
+period = 0
+; filename = input.wav // GET THE INPUT FILE FROM THE COMMAND LINE
+filename = \cm[inputfile(I){input.wav}:file name of the input wave file]
+monoMixdown = 1 
+
+  ;;;; default (template) configuration section for component 'cFramer' ;;;;
+[framer:cFramer]
+reader.dmLevel = wave
+writer.dmLevel = waveframes
+copyInputName = 1
+frameMode = fixed
+frameSize = 0.025000
+frameStep = 0.010000
+frameCenterSpecial = left
+noPostEOIprocessing = 1
+
+  ;;;; default (template) configuration section for component 'cEnergy' ;;;;
+[energy:cEnergy]
+reader.dmLevel = waveframes
+writer.dmLevel = energy
+nameAppend = energy
+copyInputName = 1
+processArrayFields = 0
+htkcompatible = 0
+rms = 0
+log = 1
+ 
+
+/////////////////////////////////////////////////////////////////////////////
+
+[pe:cVectorPreemphasis]
+reader.dmLevel=waveframes
+writer.dmLevel=framespe
+k=0.97
+de=0
+
+[win:cWindower]
+reader.dmLevel=framespe
+writer.dmLevel=winframes
+ ; hamming window
+winFunc = ham
+ ; no gain
+gain = 1.0
+offset = 0
+
+[fft:cTransformFFT]
+reader.dmLevel=winframes
+writer.dmLevel=fft
+
+[fftmag:cFFTmagphase]
+reader.dmLevel=fft
+writer.dmLevel=fftmag
+
+[melspec:cMelspec]
+reader.dmLevel=fftmag
+writer.dmLevel=melspec
+; htk compatible sample value scaling
+htkcompatible = 1
+nBands = 26
+; use power spectrum instead of magnitude spectrum
+usePower = 1
+lofreq = 0
+hifreq = 8000
+specScale = mel
+
+[plp:cPlp]
+reader.dmLevel=melspec
+writer.dmLevel=plp
+firstCC = 0
+lpOrder = 5
+cepLifter = 22
+compression = 0.33
+htkcompatible = 1 
+doIDFT = 0
+doLpToCeps = 0
+doLP = 0
+doInvLog = 0
+doAud = 1
+doLog = 0
+
+/*
+[delta:cDeltaRegression]
+reader.dmLevel=plp
+writer.dmLevel=plpde
+deltawin=2
+blocksize=1
+
+[accel:cDeltaRegression]
+reader.dmLevel=plpde
+writer.dmLevel=plpdede
+deltawin=2
+blocksize=1
+*/
+
+[mfcc:cMfcc]
+reader.dmLevel=melspec
+writer.dmLevel=mfcc
+copyInputName = 1
+processArrayFields = 1
+firstMfcc = 1
+lastMfcc  = 12
+cepLifter = 22.0
+htkcompatible = 1
+
+[acf:cAcf]
+reader.dmLevel=fftmag
+writer.dmLevel=acf
+nameAppend = acf
+copyInputName = 1
+processArrayFields = 1
+usePower = 1
+cepstrum = 0
+
+[cepstrum:cAcf]
+reader.dmLevel=fftmag
+writer.dmLevel=cepstrum
+nameAppend = acf
+copyInputName = 1
+processArrayFields = 1
+usePower = 1
+cepstrum = 1
+
+[pitchACF:cPitchACF]
+  ; the pitchACF component must ALWAYS read from acf AND cepstrum in the given order!
+reader.dmLevel=acf;cepstrum
+writer.dmLevel=pitch
+copyInputName = 1
+processArrayFields = 0
+maxPitch = 500
+voiceProb = 1
+voiceQual = 0
+HNR = 0
+F0 = 1
+F0raw = 0
+F0env = 1
+voicingCutoff = 0.550000
+
+/*
+[energy:cEnergy]
+reader.dmLevel=frames
+writer.dmLevel=energy
+nameAppend = energy
+copyInputName = 1
+processArrayFields = 0
+htkcompatible=1
+rms = 0
+log = 1
+
+[cat:cVectorConcat]
+reader.dmLevel=mfcc;energy
+writer.dmLevel=ft0
+copyInputName = 1
+processArrayFields = 0
+
+
+[delta:cDeltaRegression]
+reader.dmLevel=ft0
+writer.dmLevel=ft0de
+nameAppend = de
+copyInputName = 1
+noPostEOIprocessing = 0
+deltawin=2
+blocksize=1
+
+[accel:cDeltaRegression]
+reader.dmLevel=ft0de
+writer.dmLevel=ft0dede
+nameAppend = de
+copyInputName = 1
+noPostEOIprocessing = 0
+deltawin=2
+blocksize=1
+*/
+
+[mzcr:cMZcr]
+reader.dmLevel=waveframes
+writer.dmLevel=mzcr
+copyInputName = 1
+processArrayFields = 1
+zcr = 1
+amax = 0
+mcr = 0
+maxmin = 0
+dc = 0
+
+[spectral:cSpectral]
+reader.dmLevel=fftmag
+writer.dmLevel=spectral
+copyInputName = 1
+processArrayFields = 1
+squareInput = 1
+bands[0]=0-250
+bands[1]=0-650
+bands[2]=250-650
+bands[3]=1000-4000
+bands[4]=3010-9123
+rollOff[0] = 0.25
+rollOff[1] = 0.50
+rollOff[2] = 0.75
+rollOff[3] = 0.90
+flux = 1
+centroid = 1
+maxPos = 1
+minPos = 1
+entropy = 0
+variance = 1
+skewness = 1
+kurtosis = 1
+slope = 1
+
+
+[lld:cContourSmoother]
+reader.dmLevel=energy;mfcc;melspec;mzcr;pitch;spectral
+writer.dmLevel=lld
+writer.levelconf.nT=10
+;writer.levelconf.noHang=2
+writer.levelconf.isRb=0
+writer.levelconf.growDyn=1
+;processArrayFields=0
+nameAppend = sma
+copyInputName = 1
+noPostEOIprocessing = 0
+smaWin = 3
+
+// ---- delta regression of LLD ----
+
+[delta1:cDeltaRegression]
+reader.dmLevel=lld
+writer.dmLevel=lld_de
+writer.levelconf.isRb=0
+writer.levelconf.growDyn=1
+nameAppend = de
+copyInputName = 1
+noPostEOIprocessing = 0
+deltawin=2
+blocksize=1
+
+[delta2:cDeltaRegression]
+reader.dmLevel=lld_de
+writer.dmLevel=lld_dede
+writer.levelconf.isRb=0
+writer.levelconf.growDyn=1
+nameAppend = de
+copyInputName = 1
+noPostEOIprocessing = 0
+deltawin=2
+blocksize=1
+
+
+/////////////////////////////////////////////////////////////////////////////
+
+  ;;;; default (template) configuration section for component 'cCsvSink' ;;;;
+[csvSink:cCsvSink]
+reader.dmLevel = lld
+; filename = myenergy.csv
+filename = \cm[outputfile(O){output.csv}:file name of the output CSV file]
+delimChar = ;
+append = 0
+timestamp = 1
+number = 1
+printHeader = 1
+ 
+
+// ################### END OF openSMILE CONFIG FILE ######################
+

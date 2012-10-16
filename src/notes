@@ -1,0 +1,62 @@
+Notes de Charlotte :
+zinzin moretto ne marche pas. Lien trouvé aucun. Musique non reconnue par le site internet
+meme probleme A PIC
+meme probleme HEARTBRAKER
+// Je passe a des musiques plus connues...;
+Problème ave Camisado de Panic at the disco ! musique existe bien http://www.lyricsmuse.com/tracks/panic-at-the-disco-camisado Problème de ! à enlever du lien
+ayo i am not afraid pas trouvée sur le site internet, paroles n'existe pas
+Mauvais tag donc on trouve un lien sans.com : http://www.lyricsmuse.com/tracks/p.o.d.-without-jah,-nothin-(
+Problème de "." On devrait avoir http://www.lyricsmuse.com/tracks/pod-portrait et au lieu on a http://www.lyricsmuse.com/tracks/p.o.d.-portrait
+Aaron pas connu
+ACDC highway to hell comuz non connu (lol!) et mal tagé !! 'nan-nan'
+Pas de tag dans Gorillaz
+Mauvais tag on devrait avoir http://www.lyricsmuse.com/tracks/3-doors-down-life-of-my-own et non http://www.lyricsmuse.com/tracks/3-doors-down-time-of-my-life
+http://www.lyricsmuse.com/tracks/3-doors-down-when-youre-young bon intitulé mais pas de parole sur le site
+http://www.lyricsmuse.com/tracks/3-doors-down-ticket-to-heaven et non http://www.lyricsmuse.com/tracks/3-doors-down-heaven
+ALBUMS 2005,2006,2008 3 DOORS DOWN OK	
+ALBUM 1990 OK	
+ALBUM OCEAN EYE OK
+ALBUMS OWL CITY OK
+Absynthe minded, seulement 10% des musiques avec paroles sur le site...
+Album ADASTREIA pas connu par le site
+Chuckberry: supprimer les virgules dans l'url
+On veut : http://www.lyricsmuse.com/tracks/chuck-berry-back-in-the-usa et on a http://www.lyricsmuse.com/tracks/chuck-berry-feat.-linda-ronsta-back-in-the-u.s.a donc 1. enlever les points de U.S.A. et 2.virer les "feat XX"
+
+
+
+((((SUGGESTIONS : 1. Faire une recherche à partir d'internet avec le nom et non les tags si problème 2. Passer toute la banque de données au préalable avec le logiciel MusicBrainz 3. Quid des chansons françaises?)
+
+
+// remove feat.XXX
+	found = artistMuse.find("feat.");
+	while( found != string::npos )
+	{
+		artistMuse = artistMuse.substr(0, found);	//		erase(found, 1);
+		found = artistMuse.find("'");
+	}	
+	
+// remove .
+	found = artistMuse.find(".");
+	while( found != string::npos )
+	{
+		artistMuse.erase(found, 1);
+		found = artistMuse.find("'");
+	}	
+	
+	// remove !
+	found = artistMuse.find("!");
+	while( found != string::npos )
+	{
+		artistMuse.erase(found, 1);
+		found = artistMuse.find("'");
+	}	
+	
+	// remove ;
+	found = artistMuse.find(";");
+	while( found != string::npos )
+	{
+		artistMuse.erase(found, 1);
+		found = artistMuse.find("'");
+	}	
+	
+
