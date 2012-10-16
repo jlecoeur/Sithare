@@ -34,9 +34,8 @@ class Lyrics
 	public:
 		Lyrics();
 		Lyrics(std::string, std::string);
-		bool fetchLyrics();
-		bool fetchLyricsMuse();		// set as private after debug
-		bool fetchAzLyrics();		// set as private after debug
+		bool fetchLyricsMuse();
+		bool fetchAzLyrics();
 		std::string getArtist();
 		std::string getTitle();
 		std::string getLyrics();

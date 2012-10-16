@@ -3,15 +3,14 @@ Installation sous Ubuntu :
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 	
 1) Installation des dépendances : 
--> libcurl 	(web)
--> id3lib 	(tags mp3)
--> opencv	(computer vision)
+-> libcurl 	(web) 		: paquets libcurl et libcurl-dev
+-> id3lib 	(tags mp3) 	: paquets libid3 et libid3-dev
 
-commande : sudo aptitude install libcurl3 libcurl-dev libid3 libid3-dev libcv2.1 libcv-dev libcvaux2.1 libcvaux-dev libhighgui2.1 libhighgui-dev
+commande : sudo apt-get install libcurl libcurl-dev libid3 libid3-dev
 
 2) Compilation
 cd Dossier_du_projet/
 make
 
 3) Lancement
-./sithare --help 
+./sithare nom_de_fichier.mp3 
