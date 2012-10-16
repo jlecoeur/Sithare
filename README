@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 Installation sous Ubuntu :
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-sh ./INSTALL
+sh ./install.sh
 
 
 
